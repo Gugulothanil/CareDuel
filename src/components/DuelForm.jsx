@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import db from "../firebase"; // Make sure this path is correct and the file exists
+import { collection, addDoc } from "firebase/firestore";
 
 export default function DuelForm() {
   const [formData, setFormData] = useState({
@@ -17,38 +19,65 @@ export default function DuelForm() {
     setMessage("");
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   for (let key in formData) {
+  //     if (!formData[key]) {
+  //       setError("❌ All fields are required.");
+  //       return;
+  //     }
+  //   }
+
+  //   try {
+  //     await addDoc(collection(db, "duels"), {
+  //       ...formData,
+  //       createdAt: new Date(),
+  //     });
+
+  //     setMessage("✅ Thanks for starting a duel!");
+  //     setFormData({ name: "", email: "", causeA: "", causeB: "" });
+  //   } catch (err) {
+  //     console.error("Firestore Error:", err);
+  //     setError("❌ Something went wrong. Please try again.");
+  //   }
+  // };
+
+
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    for (let key in formData) {
-      if (!formData[key]) {
-        setError("❌ All fields are required.");
-        return;
-      }
+  e.preventDefault();
+
+  console.log("📦 Submitting:", formData); // Debug
+
+  for (let key in formData) {
+    if (!formData[key]) {
+      setError("❌ All fields are required.");
+      return;
     }
+  }
 
-    try {
-      const res = await fetch("/api/submit-duel", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+  try {
+    const docRef = await addDoc(collection(db, "duels"), {
+      name: formData.name,
+      email: formData.email,
+      causeA: formData.causeA,
+      causeB: formData.causeB,
+      createdAt: new Date(),
+    });
 
-      const data = await res.json();
+    console.log("✅ Document saved with ID:", docRef.id); // Debug
 
-      if (data.success) {
-        setMessage("✅ Thanks for starting a duel!");
-        setFormData({ name: "", email: "", causeA: "", causeB: "" });
-      } else {
-        setError("❌ Submission failed. Try again.");
-      }
-    } catch (err) {
-      setError("❌ Something went wrong. Please try again.");
-    }
-  };
+    setMessage("✅ Thanks for starting a duel!");
+    setFormData({ name: "", email: "", causeA: "", causeB: "" });
+  } catch (err) {
+    console.error("❌ Firestore Error:", err); // Debug
+    setError("❌ Something went wrong. Please try again.");
+  }
+};
+
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-10 sm:px-6 lg:px-8">
-  
       <form
         onSubmit={handleSubmit}
         className="bg-white p-6 sm:p-8 rounded-xl shadow-lg space-y-5 border border-gray-100"
