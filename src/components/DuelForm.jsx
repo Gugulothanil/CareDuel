@@ -48,10 +48,7 @@ export default function DuelForm() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-10 sm:px-6 lg:px-8">
-      <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6 text-red-600">
-        Start a New Duel
-      </h2>
-
+  
       <form
         onSubmit={handleSubmit}
         className="bg-white p-6 sm:p-8 rounded-xl shadow-lg space-y-5 border border-gray-100"

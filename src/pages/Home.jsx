@@ -16,7 +16,7 @@ export default function Home() {
       <main className="min-h-screen bg-gray-100 p-6 font-['Roboto']">
         <div className="max-w-3xl mx-auto text-center mb-10">
           <h1 className="text-4xl font-['Poppins'] font-bold text-[#E53935] mb-6">
-            Clash for a Cause
+            Clash for a Cause 🎯
           </h1>
 
           <p className="mb-4 text-gray-700">
